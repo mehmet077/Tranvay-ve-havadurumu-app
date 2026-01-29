@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+  <script src="https://darkskyapp.github.io/skycons/skycons.js"></script>
+  <style>
+/* ================= ROOT FONT SCALE ================= */
+html {
+  font-size: clamp(7px, 1.1vw, 16px);
+}
+
+/* LED PANEL EXTRA GÜVENLİK */
+@media (max-width: 360px), (max-height: 450px) {
+  html { font-size: 6.5px; }
+}
+
+/* ================= THEME ================= */
+:root {
+  --bg-dark: #0f172a;
+  --card-bg: rgba(30, 41, 59, 0.6);
+  --accent-green: #10b981;
+  --accent-blue: #3b82f6;
+  --accent-yellow: #f59e0b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: 1px solid rgba(255,255,255,.1);
+}
+
+/* ================= BASE ================= */
+body, html {
+  margin: 0;
+  height: 100%;
+  background: radial-gradient(circle at top right, #1e293b, #0f172a);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+
+main {
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ================= GLASS CARD ================= */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  border-radius: 1.6rem;
+  padding: 1.4rem;
+  border: var(--border);
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ================= WEATHER ================= */
+.weather-horizontal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.w-main {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.w-icon {
+  font-size: 4.5rem;
+}
+
+.w-temp {
+  font-size: 5.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.w-desc {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent-yellow);
+}
+
+.w-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 2.5rem;
+  padding-left: 2rem;
+  border-left: var(--border);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stat-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+/* ================= TRAM ================= */
+.tram-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+}
+
+.column-title {
+  font-size: 1rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+.vehicle-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.vehicle-card.gelis { border-left: 0.5rem solid var(--accent-green); }
+.vehicle-card.donus { border-left: 0.5rem solid var(--accent-blue); }
+
+.dest-name {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.line-badge {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.minutes {
+  font-size: 4rem;
+  font-weight: 900;
+}
+
+.min-label {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+/* ================= LOGO ================= */
+.Logo-container {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.Logo-wrapper {
+  width: 55%;
+  animation: floatAnim 4s ease-in-out infinite;
+}
+
+.Logo {
+  width: 100%;
+  filter: drop-shadow(0 0 10px rgba(59,130,246,.4));
+}
+
+/* ================= FOOTER ================= */
+footer {
+  height: 5.5rem;
+  border-top: var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+#live-clock {
+  font-size: 3rem;
+  font-weight: 900;
+}
+
+#live-date {
+  font-size: 0.9rem;
+  color: var(--accent-blue);
+}
+
+/* ================= ANIM ================= */
+@keyframes floatAnim {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+</style>
+</head>
+<body>
+
+  <main>
+    <div id="weather-container">
+        <div class="glass-card weather-horizontal">
+            Hava durumu yükleniyor...
+        </div>
+    </div>
+
+    <div class="tram-section">
+        <div class="column">
+            <div class="column-title" style="color: var(--accent-green)">
+                <span style="animation: pulse 2s infinite">●</span> MEYDAN / ŞEHİR MERKEZİ YÖNÜ
+            </div>
+            <div id="gelis-list"></div>
+        </div>
+
+        <div class="column">
+            <div class="column-title" style="color: var(--accent-blue)">
+                <span style="animation: pulse 2s infinite">●</span> TALAS / ÜNİVERSİTE YÖNÜ
+            </div>
+            <div id="donus-list"></div>
+        </div>
+    </div>
+
+   <div class="Logo-container">
+  <div class="Logo-wrapper">
+    <img src="logo.png" alt="Logo" class="Logo">
+  </div>
+</div>
+  </main>
+
+  <footer>
+    <div style="font-weight: 600; opacity: 0.7">
+        © 2024 [Company-Name]<br>
+    </div>
+    <div>
+      <div id="live-clock">00:00:00</div>
+      <div id="live-date">...</div>
+    </div>
+  </footer>
+
+  <script>
+    const ID_GELIS = '20425e20-6c91-4bd3-9a71-27d8a676a15b';
+    const ID_DONUS = '744cf7cb-5d54-407b-8d36-71069557a5e4';
+
+    const iconMap = {
+        "Güneşli": "☀️", "Açık": "☀️", "Parçalı Bulutlu": "⛅", 
+        "Az Bulutlu": "🌤️", "Bulutlu": "☁️", "Çok Bulutlu": "☁️",
+        "Yağmurlu": "🌧️", "Karlı": "❄️", "Sisli": "🌫️", "Fırtına": "⛈️"
+    };
+
+    function updateClock() {
+        const simdi = new Date();
+        document.getElementById('live-clock').innerText = simdi.toLocaleTimeString('tr-TR');
+        document.getElementById('live-date').innerText = simdi.toLocaleDateString('tr-TR', { 
+            day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' 
+        });
+    }
+
+    async function fetchWeather() {
+        try {
+            const res = await fetch(`http://localhost:3000/api/hava/Kayseri`);
+            const data = await res.json();
+            if(data.success) {
+                const ikon = iconMap[data.durum] || "🌡️";
+               document.getElementById('weather-container').innerHTML = `
+                  <div class="glass-card weather-horizontal">
+                      <div class="w-main">
+                          <div class="w-icon">${ikon}</div>
+                          <div>
+                              <div class="w-temp">${data.derece}°</div>
+                              <div class="w-desc">${data.durum}</div>
+                          </div>
+                      </div>
+                      <div class="w-details-grid">
+                          <div class="stat-item"><span class="stat-label">Hissedilen</span><span class="stat-val">${data.hissedilen}°</span></div>
+                          <div class="stat-item"><span class="stat-label">Nem</span><span class="stat-val">${data.nem}</span></div>
+                          <div class="stat-item"><span class="stat-label">Rüzgar</span><span class="stat-val">${data.ruzgar} <small></small></span></div>
+                          <div class="stat-item"><span class="stat-label">Lokasyon</span><span class="stat-val">KAYSERİ</span></div>
+                      </div>
+                  </div>
+              `;
+            }
+        } catch (e) {
+            console.error("Hava durumu hatası:", e);
+        }
+    }
+
+    function createVehicleCard(v, type) {
+        const color = type === 'gelis' ? 'var(--accent-green)' : 'var(--accent-blue)';
+        return `
+            <div class="glass-card vehicle-card ${type}">
+                <div>
+                    <div class="line-badge">${v.lineName}</div>
+                    <div class="dest-name">${v.lastStopName}</div>
+                </div>
+                <div class="arrival-zone">
+                    <span class="minutes" style="color: ${color}">${v.timeToStop}</span>
+                    <span class="min-label" style="color: ${color}">DK</span>
+                </div>
+            </div>
+        `;
+    }
+
+    async function updateTramData() {
+        try {
+            const [resGelis, resDonus] = await Promise.all([
+                fetch(`http://localhost:3000/api/durak/${ID_GELIS}`).then(r => r.json()),
+                fetch(`http://localhost:3000/api/durak/${ID_DONUS}`).then(r => r.json())
+            ]);
+
+            const renderList = (res, elementId, type) => {
+                const container = document.getElementById(elementId);
+                const vehicles = res.data?.Data?.vehicles;
+
+                if (res.success && vehicles && vehicles.length > 0) {
+                    const firstVehicle = vehicles[0]; // 🔹 Sadece ilk kayıt
+                    container.innerHTML = createVehicleCard(firstVehicle, type);
+                } else {
+                    container.innerHTML = '<div class="no-data">Yaklaşan araç bulunamadı</div>';
+                }
+            };
+
+
+            renderList(resGelis, 'gelis-list', 'gelis');
+            renderList(resDonus, 'donus-list', 'donus');
+
+        } catch (e) {
+            console.error("Tramvay verisi hatası:", e);
+        }
+    }
+
+    // Başlatıcılar
+    setInterval(updateClock, 1000);
+    setInterval(updateTramData, 20000);
+    setInterval(fetchWeather, 600000);
+
+    updateClock();
+    fetchWeather();
+    updateTramData();
+  </script>
+</body>
+</html>
